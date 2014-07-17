@@ -99,8 +99,8 @@ func NewMenu(X *xgbutil.XUtil) {
 	menu.SetHeight(100)
 	menu.SetWidth(100)
 	menu.SetDisplay(0)
-	menu.SetExtType([]string{"_NET_WM_WINDOW_TYPE_DOCK"})
-	states := []string{"_NET_WM_STATE_SKIP_PAGER", "_NET_WM_STATE_SKIP_TASKBAR", "_NET_WM_STATE_MODAL"}
+	menu.SetExtType([]string{"_NET_WM_WINDOW_TYPE_MENU"})
+	states := []string{"_NET_WM_STATE_SKIP_PAGER", "_NET_WM_STATE_SKIP_TASKBAR"}
 	menu.SetStates(states)
 
 	fmt.Printf("menu: %v\n", menu)
