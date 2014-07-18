@@ -12,78 +12,8 @@ import (
 )
 
 type Menu struct {
-	bgColor, fgColor, height, width, display int
-	extType, states                          []string
-}
-
-func (m *Menu) SetBgColor(colorCode int) {
-	m.bgColor = colorCode
-	return
-}
-
-func (m *Menu) GetBgColor() int {
-	bgColor := m.bgColor
-	return bgColor
-}
-
-func (m *Menu) SetFgColor(colorCode int) {
-	m.fgColor = colorCode
-	return
-}
-
-func (m *Menu) GetFgColor() int {
-	fgColor := m.fgColor
-	return fgColor
-}
-
-func (m *Menu) SetHeight(height int) {
-	m.height = height
-	return
-}
-
-func (m *Menu) GetHeight() int {
-	height := m.height
-	return height
-}
-
-func (m *Menu) SetWidth(width int) {
-	m.width = width
-	return
-}
-
-func (m *Menu) GetWidth() int {
-	width := m.width
-	return width
-}
-
-func (m *Menu) SetDisplay(display int) {
-	m.display = display
-	return
-}
-
-func (m *Menu) GetDisplay() int {
-	display := m.display
-	return display
-}
-
-func (m *Menu) SetExtType(extType []string) {
-	m.extType = extType
-	return
-}
-
-func (m *Menu) GetExtType() []string {
-	extType := m.extType
-	return extType
-}
-
-func (m *Menu) SetStates(states []string) {
-	m.states = states
-	return
-}
-
-func (m *Menu) GetStates() []string {
-	states := m.states
-	return states
+	BgColor, FgColor, Height, Width, Display int
+	ExtType, States                          []string
 }
 
 func NewMenu(X *xgbutil.XUtil) {
@@ -94,22 +24,22 @@ func NewMenu(X *xgbutil.XUtil) {
 		log.Fatal(err)
 	}
 
-	menu.SetBgColor(0x191919)
-	menu.SetFgColor(0xd3d3d3)
-	menu.SetHeight(100)
-	menu.SetWidth(100)
-	menu.SetDisplay(0)
-	menu.SetExtType([]string{"_NET_WM_WINDOW_TYPE_MENU"})
+	menu.BgColor = 0x191919
+	menu.FgColor = 0xd3d3d3
+	menu.Height = 100
+	menu.Width = 100
+	menu.Display = 0
+	menu.ExtType = []string{"_NET_WM_WINDOW_TYPE_MENU"}
 	states := []string{"_NET_WM_STATE_SKIP_PAGER", "_NET_WM_STATE_SKIP_TASKBAR"}
-	menu.SetStates(states)
+	menu.States = states
 
 	fmt.Printf("menu: %v\n", menu)
-	window.Create(X.RootWin(), 100, 100, menu.GetWidth(), menu.GetHeight(),
-		xproto.CwBackPixel|xproto.CwEventMask, uint32(menu.GetBgColor()),
+	window.Create(X.RootWin(), 100, 100, menu.Width, menu.Height,
+		xproto.CwBackPixel|xproto.CwEventMask, uint32(menu.BgColor),
 		xproto.EventMaskButtonRelease)
 
-	ewmh.WmWindowTypeSet(X, window.Id, menu.GetExtType())
-	ewmh.WmStateSet(X, window.Id, menu.GetStates())
+	ewmh.WmWindowTypeSet(X, window.Id, menu.ExtType)
+	ewmh.WmStateSet(X, window.Id, menu.States)
 	window.Map()
 }
 
