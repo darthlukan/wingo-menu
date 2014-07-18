@@ -10,4 +10,4 @@
 
 ## License
 
-> GPLv3, see LICENSE file.
+> [MIT](http://choosealicense.com/licenses/mit/), see LICENSE file.
