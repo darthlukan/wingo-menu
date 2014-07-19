@@ -10,7 +10,7 @@ import (
 
 const filesDir string = "/usr/share/applications/"
 
-func main() {
+func GetDesktopEntries() {
 	files, err := ioutil.ReadDir(filesDir)
 	if err != nil {
 		panic(err)

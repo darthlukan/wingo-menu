@@ -9,14 +9,23 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"log"
+    "encoding/json"
+    "os"
+    "path"
 )
 
 type Menu struct {
-	BgColor, FgColor, Height, Width, Display int
+	BgColor, FgColor, Height, Width, Display, FontSize int
 	ExtType, States                          []string
+    Font string
 }
 
-func NewMenu(X *xgbutil.XUtil) {
+type Config struct {
+    BgColor, FgColor, FontSize int
+    Font string
+}
+
+func NewMenu(X *xgbutil.XUtil, config *Config) {
 	menu := new(Menu)
 
 	window, err := xwindow.Generate(X)
@@ -24,8 +33,8 @@ func NewMenu(X *xgbutil.XUtil) {
 		log.Fatal(err)
 	}
 
-	menu.BgColor = 0x191919
-	menu.FgColor = 0xd3d3d3
+	menu.BgColor = config.BgColor
+	menu.FgColor = config.FgColor
 	menu.Height = 100
 	menu.Width = 100
 	menu.Display = 0
@@ -45,6 +54,16 @@ func NewMenu(X *xgbutil.XUtil) {
 
 func main() {
 	fmt.Printf("Hello World!\n")
+    goPath := os.Getenv("GOPATH")
+    configPath := path.Join(goPath, "src", "github.com", "darthlukan", "wingo-menu")
+    configFile, err := os.Open(configPath + "/config.json")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    decoder := json.NewDecoder(configFile)
+    config := &Config{}
+    decoder.Decode(&config)
 
 	X, err := xgbutil.NewConn()
 	if err != nil {
@@ -52,6 +71,6 @@ func main() {
 	}
 
 	mousebind.Initialize(X)
-	NewMenu(X)
+	NewMenu(X, config)
 	xevent.Main(X)
 }
